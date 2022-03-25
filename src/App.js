@@ -1,9 +1,10 @@
 import './App.css';
 import { useReducer, useState } from 'react';
+import DigitButton from './components/DigitButton';
+import OperationButton from './components/OperationButton'
 
 // main component
 function App() {
-
   return (
     <div className="App-wrapper">
       <div className="App">
@@ -13,22 +14,22 @@ function App() {
         </div>
         <div className="buttons-wrapper">
           {/* numbers and comm */}
-          <button style={{gridArea: 'zero'}} onClick={() => console.log("0")}>0</button>
-          <button style={{gridArea: 'one'}} onClick={() => console.log("1")}>1</button>
-          <button style={{gridArea: 'two'}} onClick={() => console.log("2")}>2</button>
-          <button style={{gridArea: 'three'}} onClick={() => console.log("3")}>3</button>
-          <button style={{gridArea: 'four'}} onClick={() => console.log("4")}>4</button>
-          <button style={{gridArea: 'five'}} onClick={() => console.log("5")}>5</button>
-          <button style={{gridArea: 'six'}} onClick={() => console.log("6")}>6</button>
-          <button style={{gridArea: 'seven'}} onClick={() => console.log("7")}>7</button>
-          <button style={{gridArea: 'eight'}} onClick={() => console.log("8")}>8</button>
-          <button style={{gridArea: 'nine'}} onClick={() => console.log("9")}>9</button>
-          <button style={{gridArea: 'comm'}} onClick={() => console.log(".")}>.</button>
+          <DigitButton gridArea='zero' digit="0"/>
+          <DigitButton gridArea='one' digit="1"/>
+          <DigitButton gridArea='two' digit="2"/>
+          <DigitButton gridArea='three' digit="3"/>
+          <DigitButton gridArea='four' digit="4"/>
+          <DigitButton gridArea='five' digit="5"/>
+          <DigitButton gridArea='six' digit="6"/>
+          <DigitButton gridArea='seven' digit="7"/>
+          <DigitButton gridArea='eight' digit="8"/>
+          <DigitButton gridArea='nine' digit="9"/>
+          <DigitButton gridArea='comm' digit="."/>
           {/* math operators */}
-          <button style={{gridArea: 'div'}} onClick={() => console.log("/")}>/</button>
-          <button style={{gridArea: 'mul'}} onClick={() => console.log("*")}>*</button>
-          <button style={{gridArea: 'minus'}} onClick={() => console.log("-")}>-</button>
-          <button style={{gridArea: 'plus'}} onClick={() => console.log("+")}>+</button>
+          <OperationButton gridArea='div' operation="/"/>
+          <OperationButton gridArea='mul' operation="*"/>
+          <OperationButton gridArea='minus' operation="-"/>
+          <OperationButton gridArea='plus' operation="+"/>
           {/* special */}
           <button style={{gridArea: 'equal'}} onClick={() => console.log("=")}>=</button>
           <button style={{gridArea: 'clear'}} onClick={() => console.log("AC")}>AC</button>
