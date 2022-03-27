@@ -1,9 +1,10 @@
 import React from 'react';
+import { ACTIONS } from '../App'
 
-function DigitButton({digit, gridArea}) {
+function DigitButton({digit, gridArea, dispatch}) {
 
   return (
-   <button style={{gridArea: gridArea}} onClick={() => console.log(digit)}>
+   <button style={{gridArea: gridArea}} onClick={() => dispatch({ type: ACTIONS.ADD_DIGIT, payload: {digit} })}>
       {digit}
    </button>
   )
