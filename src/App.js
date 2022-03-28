@@ -26,6 +26,31 @@ function reducer(state = initialState, { type, payload }) {
         ...state,
         currentOperand: `${state.currentOperand || ""}${payload.digit}`
       }
+    case ACTIONS.CLEAR:
+      return {
+        currentOperand: null
+      }
+    case ACTIONS.DELETE_DIGIT:
+      if(state.currentOperand == null) return state;
+      if(state.currentOperand.length === 1) {
+        return {
+          ...state,
+          currentOperand: null
+        }
+      }
+
+      if(state.currentOperand == 0) {
+        return {
+          ...state,
+          currentOperand: null
+        }
+      }
+
+      return {
+        ...state,
+        // remove last digit from operand
+        currentOperand: state.currentOperand.slice(0, -1)
+      };
       default:
         return {...state}
   }
@@ -56,14 +81,14 @@ function App() {
           <DigitButton gridArea='nine' digit="9" dispatch={dispatch} />
           <DigitButton gridArea='comm' digit="." dispatch={dispatch} />
           {/* math operators */}
-          <OperationButton gridArea='div' operation="/"/>
-          <OperationButton gridArea='mul' operation="*"/>
-          <OperationButton gridArea='minus' operation="-"/>
-          <OperationButton gridArea='plus' operation="+"/>
+          <OperationButton gridArea='div' operation="/" dispatch={dispatch} />
+          <OperationButton gridArea='mul' operation="*" dispatch={dispatch} />
+          <OperationButton gridArea='minus' operation="-" dispatch={dispatch} />
+          <OperationButton gridArea='plus' operation="+" dispatch={dispatch} />
           {/* special */}
           <button style={{gridArea: 'equal'}} onClick={() => console.log("=")}>=</button>
-          <button style={{gridArea: 'clear'}} onClick={() => console.log("AC")}>AC</button>
-          <button style={{gridArea: 'del'}} onClick={() => console.log("del")}>del</button>
+          <button style={{gridArea: 'clear'}} onClick={() => dispatch({type: ACTIONS.CLEAR})}>AC</button>
+          <button style={{gridArea: 'del'}} onClick={() => dispatch({type: ACTIONS.DELETE_DIGIT})}>del</button>
           <button style={{gridArea: 'percent'}} onClick={() => console.log("%")}>%</button>
         </div>
       </div>
