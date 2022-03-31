@@ -20,39 +20,97 @@ export const ACTIONS = {
 
 // reducer for manage state
 function reducer(state = initialState, { type, payload }) {
-  switch(type) {
-    case ACTIONS.ADD_DIGIT:
+switch(type) {
+  case ACTIONS.ADD_DIGIT:
+    if(state.overwrite) {
       return {
         ...state,
-        currentOperand: `${state.currentOperand || ""}${payload.digit}`
+        currentOperand: payload.digit,
+        overwrite: false,
       }
-    case ACTIONS.CLEAR:
+    }
+    if(payload.digit === "0" && state.currentOperand === "0") return state
+    if(payload.digit === "," && state.currentOperand.includes(",")) return state
+    return {
+      ...state,
+      currentOperand: `${state.currentOperand || ""}${payload.digit}`
+    }
+  case ACTIONS.CLEAR:
+    if(state.currentOperand == null) {
       return {
         currentOperand: null
       }
-    case ACTIONS.DELETE_DIGIT:
-      if(state.currentOperand == null) return state;
-      if(state.currentOperand.length === 1) {
-        return {
-          ...state,
-          currentOperand: null
-        }
-      }
+    }
+    return {
+      currentOperand: null
+    }
+  case ACTIONS.CHOOSE_OPERATION:
+    if(state.currentOperand == null && state.prevOperand == null) {
+      return state;
+    }
 
-      if(state.currentOperand == 0) {
-        return {
-          ...state,
-          currentOperand: null
-        }
-      }
-
+    if(state.currentOperand == null) {
       return {
         ...state,
-        // remove last digit from operand
-        currentOperand: state.currentOperand.slice(0, -1)
-      };
-      default:
-        return {...state}
+        operation: payload.operation
+      }
+    }
+
+    if(state.prevOperand == null) {
+      return {
+        ...state, 
+        operation: payload.operation,
+        prevOperand: state.currentOperand,
+        currentOperand: null
+      }
+    }
+    return {
+      ...state,
+      prevOperand: evaluate(state),
+      operation: payload.operation,
+      currentOperand: 0,
+      overwrite: true,
+    };
+  case ACTIONS.DELETE_DIGIT:
+    if(state.overwrite) {
+      return {
+        ...state,
+        overwrite: false,
+        currentOperand: null,
+      }
+    }
+    if(state.currentOperand == null) return state;
+    if(state.currentOperand.length === 1) {
+      return {
+        ...state,
+        currentOperand: null
+      }
+    }
+
+    if(state.currentOperand == 0) {
+      return {
+        ...state,
+        currentOperand: null
+      }
+    }
+
+    return {
+      ...state,
+      // remove last digit from operand
+      currentOperand: state.currentOperand.slice(0, -1)
+    };
+  case ACTIONS.EVALUATE:
+    if(state.operation == null || state.currentOperand == null || state.prevOperand == null) {
+      return state;
+    }
+
+    return {
+      ...state, 
+      prevOperand: null,
+      currentOperand: evaluate(state),
+      operation: null
+    };
+  default: throw new Error();
   }
 }
 
@@ -109,7 +167,7 @@ function App() {
           <OperationButton gridArea='minus' operation="-" dispatch={dispatch} />
           <OperationButton gridArea='plus' operation="+" dispatch={dispatch} />
           {/* special */}
-          <button style={{gridArea: 'equal'}} onClick={() => console.log("=")}>=</button>
+          <button style={{gridArea: 'equal'}} onClick={() => dispatch({type: ACTIONS.EVALUATE})}>=</button>
           <button style={{gridArea: 'clear'}} onClick={() => dispatch({type: ACTIONS.CLEAR})}>AC</button>
           <button style={{gridArea: 'del'}} onClick={() => dispatch({type: ACTIONS.DELETE_DIGIT})}>del</button>
           <button style={{gridArea: 'percent'}} onClick={() => console.log("%")}>%</button>
