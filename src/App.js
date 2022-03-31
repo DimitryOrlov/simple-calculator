@@ -56,6 +56,29 @@ function reducer(state = initialState, { type, payload }) {
   }
 }
 
+// evaluate math function
+function evaluate({ currentOperand, prevOperand, operation }) {
+  const prev = parseFloat(prevOperand);
+  const current = parseFloat(currentOperand);
+  if(isNaN(prev) || isNaN(current)) return "";
+  let computation = "";
+  switch(operation) {
+    case "+":
+      computation = prev + current;
+      break;
+    case "-":
+      computation = prev - current;
+      break;
+    case "*":
+      computation = prev * current;
+      break;
+    case "/":
+      computation = prev / current;
+      break;
+    default: throw new Error();
+  }
+}
+
 // main component
 function App() {
   const [{ currentOperand, prevOperand, operation}, dispatch] = useReducer(reducer, initialState);
