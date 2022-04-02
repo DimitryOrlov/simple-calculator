@@ -137,6 +137,18 @@ function evaluate({ currentOperand, prevOperand, operation }) {
   }
 }
 
+// format number
+const INTEGER_FORMAT = new Intl.NumberFormat("en-us", {
+  maximumFractionDigit: 0,
+})
+
+function formatOperand(operand) {
+  if(operand == null) return;
+  const [integer, decimal] = operand.split(".");
+  if(decimal == null) return INTEGER_FORMAT.format(integer);
+  return `${INTEGER_FORMAT.format(integer)}.${decimal}`;
+}
+
 // main component
 function App() {
   const [{ currentOperand, prevOperand, operation}, dispatch] = useReducer(reducer, initialState);
@@ -145,8 +157,8 @@ function App() {
     <div className="App-wrapper">
       <div className="App">
         <div className="output">
-          <div className="previous-operand">{prevOperand} {operation}</div>
-          <div className="current-operand">{currentOperand}</div>
+          <div className="previous-operand">{formatOperand(prevOperand)} {operation}</div>
+          <div className="current-operand">{formatOperand(currentOperand)}</div>
         </div>
         <div className="buttons-wrapper">
           {/* numbers and comm */}
