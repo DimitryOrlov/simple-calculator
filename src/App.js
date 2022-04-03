@@ -1,5 +1,5 @@
 import './App.css';
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import DigitButton from './components/DigitButton';
 import OperationButton from './components/OperationButton'
 
@@ -135,6 +135,10 @@ function evaluate({ currentOperand, prevOperand, operation }) {
       break;
     default: throw new Error();
   }
+
+  // solve javascript math error (0.1 + 0.2 = 0.30000000004)
+  computation = parseFloat(computation.toPrecision(9));
+  return computation.toString();
 }
 
 // format number
